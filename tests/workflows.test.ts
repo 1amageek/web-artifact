@@ -12,6 +12,8 @@ describe("GitHub workflows", () => {
     expect(workflow).toContain("name: CI");
     expect(workflow).toContain("push:");
     expect(workflow).toContain("pull_request:");
+    expect(workflow).toContain("uses: actions/checkout@v6");
+    expect(workflow).toContain("uses: actions/setup-node@v6");
     expect(workflow).toContain("node-version: 20");
     expect(workflow).toContain("run: npm ci");
     expect(workflow).toContain("run: npm run verify");
@@ -23,6 +25,8 @@ describe("GitHub workflows", () => {
     expect(workflow).toContain("release:");
     expect(workflow).toContain("types:");
     expect(workflow).toContain("- published");
+    expect(workflow).toContain("uses: actions/checkout@v6");
+    expect(workflow).toContain("uses: actions/setup-node@v6");
     expect(workflow).toContain("ref: ${{ github.event.release.tag_name }}");
     expect(workflow).toContain("id-token: write");
     expect(workflow).toContain("registry-url: https://registry.npmjs.org");
