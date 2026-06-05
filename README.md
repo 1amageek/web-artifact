@@ -210,7 +210,7 @@ CI and release automation:
 | Workflow | Trigger | Responsibility |
 |---|---|---|
 | `CI` | Push to `main`, pull request | Run `npm run verify` |
-| `Publish npm` | GitHub Release `published` | Run `npm run verify`, then publish to npm |
+| `Publish npm` | GitHub Release `published` | Run `npm run verify`, then publish to npm when the package version is not already published |
 
 Release requirements:
 
@@ -229,3 +229,5 @@ npm publish --access public --provenance
 
 Create and publish a GitHub Release for the commit that should be distributed.
 The workflow publishes the package version contained in that commit.
+If that exact package version already exists on npm, the workflow verifies the
+release commit and skips the duplicate publish.

@@ -31,6 +31,9 @@ describe("GitHub workflows", () => {
     expect(workflow).toContain("id-token: write");
     expect(workflow).toContain("registry-url: https://registry.npmjs.org");
     expect(workflow).toContain("run: npm run verify");
+    expect(workflow).toContain("id: published-version");
+    expect(workflow).toContain("npm view \"${package_name}@${package_version}\" version");
+    expect(workflow).toContain("if: steps.published-version.outputs.exists != 'true'");
     expect(workflow).toContain("run: npm publish --access public --provenance");
     expect(workflow).toContain("NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}");
   });
