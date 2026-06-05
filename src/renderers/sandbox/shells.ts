@@ -55,7 +55,8 @@ export function mermaidShell(payload: string): string {
     :root { color-scheme: light dark; }
     html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
     body { box-sizing: border-box; padding: 8px; }
-    #diagram { display: inline-block; overflow: auto; }
+    #diagram { display: block; width: 100%; overflow: auto; }
+    #diagram svg { display: block; width: 100% !important; max-width: none !important; height: auto !important; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -65,7 +66,16 @@ export function mermaidShell(payload: string): string {
     mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default" });
     const source = ${source};
     mermaid.render("artifact-mermaid", source)
-      .then(({ svg }) => { document.getElementById("diagram").innerHTML = svg; })
+      .then(({ svg }) => {
+        const diagram = document.getElementById("diagram");
+        diagram.innerHTML = svg;
+        const rendered = diagram.querySelector("svg");
+        if (rendered) {
+          rendered.removeAttribute("height");
+          rendered.style.width = "100%";
+          rendered.style.height = "auto";
+        }
+      })
       .catch((error) => { document.getElementById("diagram").textContent = error.message || String(error); });
   </script>
 </body>
