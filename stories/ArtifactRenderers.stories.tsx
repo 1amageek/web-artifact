@@ -149,11 +149,6 @@ const samples = {
     title: "Vega-Lite chart",
     payload: JSON.stringify({
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-      autosize: {
-        type: "fit",
-        contains: "padding",
-      },
-      width: "container",
       height: 180,
       data: {
         values: [

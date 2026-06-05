@@ -165,6 +165,9 @@ describe("sandbox renderers", () => {
   it("passes Vega-Lite specs through JSON.parse instead of direct code execution", () => {
     const shell = vegaLiteShell('{"mark":"bar","title":"</script>"};window.__pwned=1');
     expect(shell).toContain("JSON.parse");
+    expect(shell).toContain("applyVegaLiteDefaults");
+    expect(shell).toContain('spec.width = "container"');
+    expect(shell).toContain('spec.autosize = { type: "fit", contains: "padding" }');
     expect(shell).toContain("\\u003C");
     expect(shell).not.toContain('const spec = {"mark":"bar"};window.__pwned=1');
   });

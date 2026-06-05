@@ -135,12 +135,25 @@ export function vegaLiteShell(payload: string): string {
   <script>
     const chart = document.getElementById("chart");
     try {
-      const spec = JSON.parse(${source});
+      const spec = applyVegaLiteDefaults(JSON.parse(${source}));
       vegaEmbed("#chart", spec, { actions: false }).catch((error) => {
         chart.textContent = error.message || String(error);
       });
     } catch (error) {
       chart.textContent = error.message || String(error);
+    }
+
+    function applyVegaLiteDefaults(spec) {
+      if (!spec || typeof spec !== "object" || Array.isArray(spec)) {
+        return spec;
+      }
+      if (spec.width === undefined) {
+        spec.width = "container";
+      }
+      if (spec.autosize === undefined) {
+        spec.autosize = { type: "fit", contains: "padding" };
+      }
+      return spec;
     }
   </script>
 </body>
