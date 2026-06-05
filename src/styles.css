@@ -240,6 +240,11 @@
   white-space: pre;
 }
 
+.wa-code {
+  counter-reset: wa-code-line;
+  padding: 8px 0;
+}
+
 .wa-code[data-diff="true"] .wa-code__line[data-kind="add"] {
   color: #b8f2c2;
 }
@@ -249,7 +254,23 @@
 }
 
 .wa-code__line {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(3ch, max-content) minmax(0, 1fr);
+  column-gap: 12px;
+  counter-increment: wa-code-line;
+  padding: 0 12px;
+}
+
+.wa-code__line::before {
+  content: counter(wa-code-line);
+  color: color-mix(in srgb, var(--wa-code-text), transparent 58%);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  user-select: none;
+}
+
+.wa-code__content {
+  min-width: max-content;
 }
 
 .wa-table-wrap {

@@ -22,7 +22,7 @@ export const codeRenderer: ArtifactRenderer = {
             data-kind={diffLineKind(line)}
             key={index}
           >
-            {line || " "}
+            <span className="wa-code__content">{line || " "}</span>
           </span>
         ))}
       </pre>

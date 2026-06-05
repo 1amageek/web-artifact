@@ -5,6 +5,7 @@ import {
   ArtifactProvider,
   ArtifactView,
   artifactTypes,
+  codeRenderer,
   createDefaultRenderers,
   csvRenderer,
   htmlSandboxRenderer,
@@ -81,6 +82,24 @@ describe("basic renderers", () => {
 
     const image = screen.getByRole("img", { name: "Logo" });
     expect(image).toHaveAttribute("src", expect.stringContaining("data:image/svg+xml"));
+  });
+
+  it("renders code with line containers", () => {
+    const { container } = render(
+      <ArtifactProvider renderers={[codeRenderer]}>
+        <ArtifactView
+          artifact={artifact({
+            type: artifactTypes.code,
+            payload: "const value = 1;\nreturn value;",
+          })}
+        />
+      </ArtifactProvider>,
+    );
+
+    expect(container.querySelectorAll(".wa-code__line")).toHaveLength(2);
+    expect(container.querySelectorAll(".wa-code__content")).toHaveLength(2);
+    expect(screen.getByText("const value = 1;")).toBeInTheDocument();
+    expect(screen.getByText("return value;")).toBeInTheDocument();
   });
 });
 
