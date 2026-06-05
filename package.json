@@ -32,11 +32,13 @@
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
     "build:storybook": "storybook build",
+    "pack:dry-run": "npm pack --dry-run",
     "prepublishOnly": "npm run typecheck && npm test && npm run build",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm test && npm run build && npm run build:storybook && npm run pack:dry-run"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
@@ -52,6 +54,7 @@
     "@storybook/react-vite": "^10.4.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^15.0.7",
+    "@types/node": "^20.19.41",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

@@ -184,3 +184,48 @@ npm run build:storybook
 
 Open `http://127.0.0.1:6006/?path=/story/web-artifact-renderers--gallery`
 to inspect the current renderer set.
+
+## Development and release
+
+Run the full local verification command before pushing changes that affect the
+package surface, renderer defaults, Storybook, or release metadata.
+
+```bash
+npm run verify
+```
+
+`verify` runs type checking, unit tests, the package build, the Storybook build,
+and an npm pack dry run.
+
+```mermaid
+flowchart LR
+  A["source change"] --> B["npm run verify"]
+  B --> C["GitHub CI"]
+  C --> D["GitHub Release"]
+  D --> E["npm publish"]
+```
+
+CI and release automation:
+
+| Workflow | Trigger | Responsibility |
+|---|---|---|
+| `CI` | Push to `main`, pull request | Run `npm run verify` |
+| `Publish npm` | GitHub Release `published` | Run `npm run verify`, then publish to npm |
+
+Release requirements:
+
+| Requirement | Purpose |
+|---|---|
+| Bump `package.json` version before release | npm rejects duplicate published versions |
+| Add repository secret `NPM_TOKEN` | Authenticates `npm publish` from GitHub Actions |
+| Enable publish permission for the token | Allows public package publication |
+| Keep `id-token: write` in the workflow | Enables npm provenance generation |
+
+The release workflow publishes with:
+
+```bash
+npm publish --access public --provenance
+```
+
+Create and publish a GitHub Release for the commit that should be distributed.
+The workflow publishes the package version contained in that commit.
