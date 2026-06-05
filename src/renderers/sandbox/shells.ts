@@ -54,7 +54,7 @@ export function mermaidShell(payload: string): string {
   <style>
     :root { color-scheme: light dark; }
     html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
-    body { box-sizing: border-box; }
+    body { box-sizing: border-box; padding: 8px; }
     #diagram { display: inline-block; overflow: auto; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -85,7 +85,7 @@ export function latexShell(payload: string, displayMode: boolean): string {
   <style>
     :root { color-scheme: light dark; }
     html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 16px ui-sans-serif, system-ui, sans-serif; }
-    body { box-sizing: border-box; }
+    body { box-sizing: border-box; padding: 8px; }
     #math { display: inline-block; }
     .katex-display { margin: 0; }
   </style>

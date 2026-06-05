@@ -126,14 +126,22 @@
 
 .wa-icon-button {
   display: inline-grid;
+  box-sizing: border-box;
   width: 22px;
   height: 22px;
+  flex: 0 0 auto;
   place-items: center;
   border: 1px solid transparent;
   border-radius: 6px;
+  padding: 0;
   background: transparent;
   color: var(--wa-muted);
   cursor: pointer;
+  line-height: 0;
+}
+
+.wa-icon-button svg {
+  display: block;
 }
 
 .wa-icon-button:hover {
