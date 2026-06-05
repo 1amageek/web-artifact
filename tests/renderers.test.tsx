@@ -11,6 +11,7 @@ import {
   htmlSandboxRenderer,
   jsonRenderer,
   latexSandboxRenderer,
+  markdownRenderer,
   mermaidSandboxRenderer,
   reactSandboxRenderer,
   reactShell,
@@ -32,6 +33,28 @@ function artifact(input: Partial<AnyArtifact>): AnyArtifact {
 }
 
 describe("basic renderers", () => {
+  it("renders GitHub-flavored Markdown tables as semantic tables", () => {
+    render(
+      <ArtifactProvider renderers={[markdownRenderer]}>
+        <ArtifactView
+          artifact={artifact({
+            type: artifactTypes.markdown,
+            payload: [
+              "| Surface | State |",
+              "| --- | --- |",
+              "| Markdown | Rendered |",
+              "| Sandbox | Isolated |",
+            ].join("\n"),
+          })}
+        />
+      </ArtifactProvider>,
+    );
+
+    expect(screen.getByRole("table")).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Surface" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Markdown" })).toBeInTheDocument();
+  });
+
   it("pretty-prints JSON", () => {
     render(
       <ArtifactProvider renderers={[jsonRenderer]}>
