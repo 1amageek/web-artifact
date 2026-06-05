@@ -73,3 +73,15 @@ export const textRenderer: ArtifactRenderer = {
 | Sandbox | HTML, React, Mermaid, LaTeX, Vega-Lite |
 
 Sandbox renderers use `iframe srcDoc` without `allow-same-origin`.
+
+## Visual inspection
+
+Storybook includes a renderer gallery and single-renderer stories.
+
+```bash
+npm run storybook
+npm run build:storybook
+```
+
+Open `http://127.0.0.1:6006/?path=/story/web-artifact-renderers--gallery`
+to inspect the current renderer set.

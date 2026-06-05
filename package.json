@@ -19,6 +19,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && vite build",
+    "build:storybook": "storybook build",
+    "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
@@ -33,6 +35,8 @@
     "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "^10.4.2",
+    "@storybook/react-vite": "^10.4.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^15.0.7",
     "@types/react": "^18.3.18",
@@ -41,6 +45,7 @@
     "jsdom": "^25.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "storybook": "^10.4.2",
     "typescript": "^5.7.3",
     "vite": "^6.0.7",
     "vitest": "^4.1.8"
