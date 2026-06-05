@@ -9,7 +9,7 @@ export const markdownRenderer: ArtifactRenderer = {
   artifactTypes: [artifactTypes.markdown],
   refine: markdownRefine,
   chrome: {
-    preferredContentInsets: "default",
+    preferredContentInsets: "none",
     surface: "text",
   },
   Component({ payload }) {

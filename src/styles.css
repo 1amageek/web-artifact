@@ -213,8 +213,10 @@
 }
 
 .wa-markdown {
+  box-sizing: border-box;
   overflow: auto;
   max-height: 520px;
+  padding: 12px;
   line-height: 1.58;
 }
 

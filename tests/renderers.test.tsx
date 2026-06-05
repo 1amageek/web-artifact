@@ -55,6 +55,10 @@ describe("basic renderers", () => {
     expect(screen.getByRole("cell", { name: "Markdown" })).toBeInTheDocument();
   });
 
+  it("uses edge-aligned scroll chrome for Markdown", () => {
+    expect(markdownRenderer.chrome?.preferredContentInsets).toBe("none");
+  });
+
   it("pretty-prints JSON", () => {
     render(
       <ArtifactProvider renderers={[jsonRenderer]}>
