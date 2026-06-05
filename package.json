@@ -1,10 +1,22 @@
 {
   "name": "web-artifact",
+  "description": "React component library for rendering LLM-generated artifact blocks.",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1amageek/web-artifact.git"
+  },
+  "bugs": {
+    "url": "https://github.com/1amageek/web-artifact/issues"
+  },
+  "homepage": "https://github.com/1amageek/web-artifact#readme",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "sideEffects": [
-    "src/styles.css"
+    "**/*.css"
   ],
   "main": "./dist/web-artifact.umd.cjs",
   "module": "./dist/web-artifact.js",
@@ -18,8 +30,9 @@
     "./styles.css": "./dist/web-artifact.css"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "build:storybook": "storybook build",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "test": "vitest run",
     "test:watch": "vitest",
