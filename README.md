@@ -2,6 +2,12 @@
 
 React component library for rendering LLM-generated `<artifact>` blocks.
 
+`web-artifact` is the React/web counterpart to `swift-artifact`. It keeps the
+artifact parsing and renderer-registration model aligned where possible, while
+using browser-native rendering surfaces for output that can be represented on
+the web. Native-only surfaces from `swift-artifact` are intentionally outside
+the initial renderer set until a web renderer contract is defined for them.
+
 ```mermaid
 flowchart LR
   A["artifact source"] --> B["ArtifactStreamParserCore"]
@@ -74,9 +80,38 @@ export const textRenderer: ArtifactRenderer = {
 
 Sandbox renderers use `iframe srcDoc` without `allow-same-origin`.
 
+## Default rendering behavior
+
+Renderer presentation defaults live in package code, not in Storybook-only
+fixtures. Host applications get these defaults by importing
+`web-artifact/styles.css` and using `createDefaultRenderers()`.
+
+```mermaid
+flowchart LR
+  A["swift-artifact model"] --> B["web-artifact parser"]
+  B --> C["createDefaultRenderers()"]
+  C --> D["default renderer shells"]
+  D --> E["src/styles.css"]
+  E --> F["host React app"]
+  E --> G["Storybook QA"]
+```
+
+Current defaults include:
+
+| Area | Default |
+|---|---|
+| Card chrome | Compact header, edge-aligned scroll areas, collapsible cards |
+| Markdown | GFM tables, task lists, blockquotes, code blocks, inline code, links |
+| Code | Line numbers and diff line coloring |
+| Sandbox | Auto-sized iframe height and renderer-specific content padding |
+| Mermaid | Diagrams scale to card width |
+| Vega-Lite | Missing `width` and `autosize` are filled for responsive charts |
+
 ## Visual inspection
 
-Storybook includes a renderer gallery and single-renderer stories.
+Storybook includes a renderer gallery and single-renderer stories. These stories
+exercise the package defaults above; visual fixes should generally be made in
+`src` so host applications receive the same behavior.
 
 ```bash
 npm run storybook
