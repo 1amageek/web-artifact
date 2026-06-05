@@ -20,6 +20,10 @@ flowchart LR
 
 ## Usage
 
+Install the package in the host React app, import the shared stylesheet once,
+parse the agent output into an `ArtifactMessage`, and render that message inside
+an `ArtifactProvider`.
+
 ```tsx
 import {
   ArtifactCanvas,
@@ -39,6 +43,66 @@ export function MessageArtifactView() {
   );
 }
 ```
+
+For streaming output, keep one parser instance per message and feed incoming
+chunks into it. Render the latest `snapshot()` or returned message after each
+chunk.
+
+```ts
+import { ArtifactStreamParserCore } from "web-artifact";
+
+const parser = new ArtifactStreamParserCore();
+
+for await (const chunk of stream) {
+  const message = parser.feed(chunk);
+  render(message);
+}
+```
+
+## Agent output contract
+
+Agents should emit ordinary prose and artifact blocks in the same text stream.
+The parser preserves prose as text segments and converts artifact blocks into
+renderable artifact segments.
+
+Artifact blocks use this shape:
+
+```text
+<artifact identifier="{stable-id}" type="{mime-type}" title="{display-title}">
+{payload}
+</artifact>
+```
+
+Agent requirements:
+
+| Requirement | Contract |
+|---|---|
+| `type` | Required MIME type used for renderer resolution |
+| `identifier` | Stable identifier for the artifact within the message |
+| `title` | Short display title for card chrome |
+| payload | Raw renderer payload, not wrapped in an extra Markdown code fence |
+| surrounding prose | Put explanation outside the artifact block |
+| streaming | Open the tag before payload, stream payload bytes, close the tag when complete |
+
+Web-compatible MIME types currently rendered by `createDefaultRenderers()`:
+
+| MIME type | Agent payload contract |
+|---|---|
+| `text/markdown` | GitHub-flavored Markdown content |
+| `application/json` | Valid JSON value |
+| `text/csv` | CSV text with a header row when tabular |
+| `application/vnd.ant.code` | Source code or unified diff text |
+| `image/svg+xml` | Complete SVG markup |
+| `text/html` | HTML document or fragment for iframe rendering |
+| `application/vnd.ant.react` | React component source that can mount in the sandbox |
+| `application/vnd.ant.mermaid` | Mermaid diagram source |
+| `application/x-latex` | LaTeX expression |
+| `application/vnd.vegalite.v5+json` | Vega-Lite v5 JSON spec |
+
+When aligning prompts with `swift-artifact`, keep the shared artifact tag model
+and MIME-type routing, but only request MIME types that have a web renderer in
+this package. Native-only `swift-artifact` surfaces should not be emitted unless
+the host app has registered a compatible web renderer.
 
 ## Renderer contract
 
