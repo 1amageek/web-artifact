@@ -12,8 +12,8 @@ export function reactShell(payload: string): string {
   <meta name="color-scheme" content="light dark">
   <style>
     :root { color-scheme: light dark; }
-    html, body { margin: 0; min-height: 100%; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
-    body { padding: 14px; box-sizing: border-box; }
+    html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
+    body { box-sizing: border-box; }
     button, input, select, textarea { font: inherit; }
     #root:empty::before { content: "React artifact did not mount a component."; color: #6d6a60; }
   </style>
@@ -53,9 +53,9 @@ export function mermaidShell(payload: string): string {
   <meta name="color-scheme" content="light dark">
   <style>
     :root { color-scheme: light dark; }
-    html, body { margin: 0; min-height: 100%; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
-    body { padding: 12px; box-sizing: border-box; }
-    #diagram { overflow: auto; }
+    html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
+    body { box-sizing: border-box; }
+    #diagram { display: inline-block; overflow: auto; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 </head>
@@ -84,8 +84,10 @@ export function latexShell(payload: string, displayMode: boolean): string {
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <style>
     :root { color-scheme: light dark; }
-    html, body { margin: 0; min-height: 100%; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 16px ui-sans-serif, system-ui, sans-serif; }
-    body { display: grid; min-height: 100vh; place-items: center; padding: 16px; box-sizing: border-box; }
+    html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 16px ui-sans-serif, system-ui, sans-serif; }
+    body { box-sizing: border-box; }
+    #math { display: inline-block; }
+    .katex-display { margin: 0; }
   </style>
 </head>
 <body>
@@ -109,9 +111,10 @@ export function vegaLiteShell(payload: string): string {
   <meta name="color-scheme" content="light dark">
   <style>
     :root { color-scheme: light dark; }
-    html, body { margin: 0; min-height: 100%; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
-    body { padding: 12px; box-sizing: border-box; }
-    #chart { display: flex; justify-content: center; overflow: auto; }
+    html, body { margin: 0; background: transparent; color: light-dark(#24231f, #f4f1e8); font: 14px ui-sans-serif, system-ui, sans-serif; }
+    body { box-sizing: border-box; }
+    #chart { width: 100%; overflow: auto; line-height: 0; }
+    .vega-embed { width: 100%; line-height: normal; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>

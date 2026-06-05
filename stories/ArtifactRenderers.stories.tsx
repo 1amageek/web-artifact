@@ -96,8 +96,8 @@ const samples = {
     type: artifactTypes.html,
     title: "HTML sandbox",
     payload: [
-      '<main style="min-height:260px;display:grid;place-items:center;background:#fffefa;color:#24231f;font:14px system-ui,sans-serif;">',
-      '  <section style="width:min(86%,520px);border:1px solid #d8d4c8;border-radius:8px;padding:18px;background:white;">',
+      '<main style="background:#fffefa;color:#24231f;font:14px system-ui,sans-serif;">',
+      '  <section style="width:100%;box-sizing:border-box;border:1px solid #d8d4c8;border-radius:8px;padding:18px;background:white;">',
       '    <h1 style="margin:0 0 8px;font-size:22px;">Sandbox HTML</h1>',
       '    <p style="margin:0 0 12px;line-height:1.55;color:#6d6a60;">The iframe surface keeps arbitrary markup isolated from the host React tree.</p>',
       '    <button style="border:0;border-radius:6px;padding:9px 12px;background:#0f766e;color:white;">Primary action</button>',
@@ -113,13 +113,11 @@ const samples = {
       "export default function Counter() {",
       "  const [count, setCount] = React.useState(2);",
       "  return (",
-      "    <main style={{ minHeight: 240, display: 'grid', placeItems: 'center', background: '#fffefa', color: '#24231f' }}>",
-      "      <section style={{ display: 'grid', gap: 12, minWidth: 260, padding: 18, border: '1px solid #d8d4c8', borderRadius: 8, background: 'white' }}>",
-      "        <strong>React sandbox</strong>",
-      "        <span style={{ color: '#6d6a60' }}>The component mounts inside an iframe.</span>",
-      "        <button onClick={() => setCount(count + 1)} style={{ border: 0, borderRadius: 6, padding: '9px 12px', background: '#0f766e', color: 'white' }}>Count {count}</button>",
-      "      </section>",
-      "    </main>",
+      "    <section style={{ display: 'grid', gap: 12, width: '100%', boxSizing: 'border-box', padding: 18, border: '1px solid #d8d4c8', borderRadius: 8, background: 'white', color: '#24231f' }}>",
+      "      <strong>React sandbox</strong>",
+      "      <span style={{ color: '#6d6a60' }}>The component mounts inside an iframe.</span>",
+      "      <button onClick={() => setCount(count + 1)} style={{ border: 0, borderRadius: 6, padding: '9px 12px', background: '#0f766e', color: 'white' }}>Count {count}</button>",
+      "    </section>",
       "  );",
       "}",
     ].join("\n"),
@@ -151,7 +149,11 @@ const samples = {
     title: "Vega-Lite chart",
     payload: JSON.stringify({
       $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-      width: 320,
+      autosize: {
+        type: "fit",
+        contains: "padding",
+      },
+      width: "container",
       height: 180,
       data: {
         values: [

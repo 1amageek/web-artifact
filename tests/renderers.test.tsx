@@ -99,8 +99,11 @@ describe("sandbox renderers", () => {
     );
 
     const frame = screen.getByTitle("HTML artifact");
+    const srcDoc = frame.getAttribute("srcdoc") ?? "";
     expect(frame).toHaveAttribute("sandbox", "allow-scripts");
-    expect(frame.getAttribute("srcdoc")).toBe("<p>safe</p>");
+    expect(srcDoc).toContain("<p>safe</p>");
+    expect(srcDoc).toContain("web-artifact:sandbox-resize");
+    expect(srcDoc).not.toContain("unterminated");
   });
 
   it("waits for complete React payload", () => {

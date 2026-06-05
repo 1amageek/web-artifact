@@ -22,14 +22,12 @@ export const htmlSandboxRenderer: ArtifactRenderer = {
   chrome: {
     preferredContentInsets: "none",
     surface: "sandbox",
-    minHeight: 280,
   },
   Component({ artifact, payload }) {
     return (
       <SandboxFrame
         title={artifact.title || "HTML artifact"}
         srcDoc={htmlShell(payload)}
-        minHeight={280}
       />
     );
   },
@@ -45,14 +43,12 @@ export const reactSandboxRenderer: ArtifactRenderer = {
   chrome: {
     preferredContentInsets: "none",
     surface: "sandbox",
-    minHeight: 280,
   },
   Component({ artifact, payload }) {
     return (
       <SandboxFrame
         title={artifact.title || "React artifact"}
         srcDoc={reactShell(payload)}
-        minHeight={280}
       />
     );
   },
@@ -65,14 +61,12 @@ export const mermaidSandboxRenderer: ArtifactRenderer = {
   chrome: {
     preferredContentInsets: "none",
     surface: "sandbox",
-    minHeight: 280,
   },
   Component({ artifact, payload }) {
     return (
       <SandboxFrame
         title={artifact.title || "Mermaid artifact"}
         srcDoc={mermaidShell(payload)}
-        minHeight={280}
       />
     );
   },
@@ -85,7 +79,6 @@ export const latexSandboxRenderer: ArtifactRenderer = {
   chrome: {
     preferredContentInsets: "none",
     surface: "sandbox",
-    minHeight: 160,
   },
   Component({ artifact, payload }) {
     const displayMode = (artifact.attributes.displayMode ?? "block") !== "inline";
@@ -93,7 +86,6 @@ export const latexSandboxRenderer: ArtifactRenderer = {
       <SandboxFrame
         title={artifact.title || "LaTeX artifact"}
         srcDoc={latexShell(payload, displayMode)}
-        minHeight={displayMode ? 160 : 96}
       />
     );
   },
@@ -109,14 +101,12 @@ export const vegaLiteSandboxRenderer: ArtifactRenderer = {
   chrome: {
     preferredContentInsets: "none",
     surface: "sandbox",
-    minHeight: 280,
   },
   Component({ artifact, payload }) {
     return (
       <SandboxFrame
         title={artifact.title || "Vega-Lite artifact"}
         srcDoc={vegaLiteShell(payload)}
-        minHeight={280}
       />
     );
   },
