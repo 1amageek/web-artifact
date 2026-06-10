@@ -57,6 +57,7 @@ describe("basic renderers", () => {
 
   it("uses edge-aligned scroll chrome for Markdown", () => {
     expect(markdownRenderer.chrome?.preferredContentInsets).toBe("none");
+    expect(markdownRenderer.chrome?.maxHeight).toBe(520);
   });
 
   it("pretty-prints JSON", () => {

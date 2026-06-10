@@ -3,11 +3,13 @@ import {
   ArtifactCanvas,
   ArtifactCard,
   ArtifactProvider,
+  ArtifactView,
   artifactTypes,
   createDefaultRenderers,
   parseArtifactMessage,
   type AnyArtifact,
   type ArtifactMessage,
+  useArtifactRegistry,
 } from "../src";
 
 interface RendererStoryProps {
@@ -71,31 +73,14 @@ const samples = {
   json: artifact({
     id: "json-preview",
     type: artifactTypes.json,
-    title: "Structured payload",
-    payload: JSON.stringify(
-      {
-        renderer: "json",
-        status: "ready",
-        counts: {
-          artifacts: 10,
-          sandboxed: 5,
-        },
-      },
-      null,
-      2,
-    ),
+    title: "Structured payload log",
+    payload: createJsonPayload(),
   }),
   csv: artifact({
     id: "csv-preview",
     type: artifactTypes.csv,
-    title: "CSV metrics",
-    payload: [
-      "renderer,latency_ms,complete",
-      "markdown,12,true",
-      "json,9,true",
-      "html sandbox,44,true",
-      "react sandbox,62,true",
-    ].join("\n"),
+    title: "CSV renderer metrics",
+    payload: createCsvPayload(),
   }),
   code: artifact({
     id: "code-preview",
@@ -256,6 +241,18 @@ function RendererStory({ artifact }: RendererStoryProps) {
   );
 }
 
+function RendererContentStory({ artifact }: RendererStoryProps) {
+  return (
+    <ArtifactProvider renderers={defaultRenderers}>
+      <div className="story-shell">
+        <div className="story-shell__inner">
+          <RendererBody artifact={artifact} />
+        </div>
+      </div>
+    </ArtifactProvider>
+  );
+}
+
 function GalleryStory() {
   return (
     <ArtifactProvider renderers={defaultRenderers}>
@@ -273,6 +270,32 @@ function GalleryStory() {
               <div className="story-item" key={artifact.id}>
                 <div className="story-label">{artifact.type}</div>
                 <ArtifactCard artifact={artifact} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </ArtifactProvider>
+  );
+}
+
+function ContentGalleryStory() {
+  return (
+    <ArtifactProvider renderers={defaultRenderers}>
+      <div className="story-shell">
+        <div className="story-shell__inner">
+          <div className="story-heading">
+            <h1>Renderer content gallery</h1>
+            <p>
+              Renderer bodies are shown without card chrome while preserving
+              each renderer's default body sizing and inset policy.
+            </p>
+          </div>
+          <div className="story-grid">
+            {galleryArtifacts.map((artifact) => (
+              <div className="story-item" key={artifact.id}>
+                <div className="story-label">{artifact.type}</div>
+                <RendererBody artifact={artifact} />
               </div>
             ))}
           </div>
@@ -301,6 +324,26 @@ function CanvasStory() {
   );
 }
 
+function RendererBody({ artifact }: RendererStoryProps) {
+  const registry = useArtifactRegistry();
+  const renderer = registry.resolve(artifact);
+  const contentInsets = renderer?.chrome?.preferredContentInsets ?? "default";
+  const bodyStyle = {
+    minHeight: renderer?.chrome?.minHeight,
+    maxHeight: renderer?.chrome?.maxHeight,
+  };
+
+  return (
+    <div
+      className="wa-card__body story-renderer-body"
+      data-insets={contentInsets}
+      style={bodyStyle}
+    >
+      <ArtifactView artifact={artifact} />
+    </div>
+  );
+}
+
 function artifact(
   input: Omit<AnyArtifact, "attributes" | "isComplete"> &
     Partial<Pick<AnyArtifact, "attributes" | "isComplete">>,
@@ -323,6 +366,55 @@ function artifactTag(artifact: AnyArtifact): string {
 
 function escapeAttribute(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("\"", "&quot;");
+}
+
+function createJsonPayload(): string {
+  return JSON.stringify(
+    {
+      renderer: "json",
+      status: "ready",
+      counts: {
+        artifacts: 48,
+        sandboxed: 18,
+        warnings: 3,
+      },
+      runs: Array.from({ length: 36 }, (_, index) => ({
+        id: `render-${String(index + 1).padStart(2, "0")}`,
+        type: index % 3 === 0 ? "text/markdown" : "application/json",
+        durationMs: 8 + index * 3,
+        state: index % 7 === 0 ? "streaming" : "rendered",
+        checks: {
+          refined: true,
+          scrollable: index % 2 === 0,
+          isolated: index % 5 === 0,
+        },
+      })),
+    },
+    null,
+    2,
+  );
+}
+
+function createCsvPayload(): string {
+  const rows = Array.from({ length: 54 }, (_, index) => {
+    const renderer = ["Markdown", "JSON", "CSV", "Code", "Sandbox"][index % 5];
+    const latency = 9 + ((index * 7) % 64);
+    const rowsRendered = 12 + index * 3;
+    const state = index % 9 === 0 ? "streaming" : "complete";
+    return [
+      `case-${String(index + 1).padStart(2, "0")}`,
+      renderer,
+      latency,
+      rowsRendered,
+      state,
+      index % 4 === 0 ? "scroll boundary" : "baseline",
+    ].join(",");
+  });
+
+  return [
+    "case_id,renderer,latency_ms,rows_rendered,state,note",
+    ...rows,
+  ].join("\n");
 }
 
 const meta = {
@@ -349,6 +441,13 @@ export const Gallery: Story = {
   render: () => <GalleryStory />,
 };
 
+export const ContentGallery: Story = {
+  args: {
+    artifact: samples.markdown,
+  },
+  render: () => <ContentGalleryStory />,
+};
+
 export const Canvas: Story = {
   args: {
     artifact: samples.markdown,
@@ -362,10 +461,24 @@ export const Markdown: Story = {
   },
 };
 
+export const MarkdownContent: Story = {
+  args: {
+    artifact: samples.markdown,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const Json: Story = {
   args: {
     artifact: samples.json,
   },
+};
+
+export const JsonContent: Story = {
+  args: {
+    artifact: samples.json,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };
 
 export const Csv: Story = {
@@ -374,10 +487,24 @@ export const Csv: Story = {
   },
 };
 
+export const CsvContent: Story = {
+  args: {
+    artifact: samples.csv,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const Code: Story = {
   args: {
     artifact: samples.code,
   },
+};
+
+export const CodeContent: Story = {
+  args: {
+    artifact: samples.code,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };
 
 export const Svg: Story = {
@@ -386,10 +513,24 @@ export const Svg: Story = {
   },
 };
 
+export const SvgContent: Story = {
+  args: {
+    artifact: samples.svg,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const HtmlSandbox: Story = {
   args: {
     artifact: samples.html,
   },
+};
+
+export const HtmlSandboxContent: Story = {
+  args: {
+    artifact: samples.html,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };
 
 export const ReactSandbox: Story = {
@@ -398,10 +539,24 @@ export const ReactSandbox: Story = {
   },
 };
 
+export const ReactSandboxContent: Story = {
+  args: {
+    artifact: samples.react,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const MermaidSandbox: Story = {
   args: {
     artifact: samples.mermaid,
   },
+};
+
+export const MermaidSandboxContent: Story = {
+  args: {
+    artifact: samples.mermaid,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };
 
 export const LatexSandbox: Story = {
@@ -410,10 +565,24 @@ export const LatexSandbox: Story = {
   },
 };
 
+export const LatexSandboxContent: Story = {
+  args: {
+    artifact: samples.latex,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const VegaLiteSandbox: Story = {
   args: {
     artifact: samples.vegaLite,
   },
+};
+
+export const VegaLiteSandboxContent: Story = {
+  args: {
+    artifact: samples.vegaLite,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };
 
 export const Fallback: Story = {
@@ -422,8 +591,22 @@ export const Fallback: Story = {
   },
 };
 
+export const FallbackContent: Story = {
+  args: {
+    artifact: samples.unknown,
+  },
+  render: (args) => <RendererContentStory {...args} />,
+};
+
 export const StreamingPlaceholder: Story = {
   args: {
     artifact: samples.streaming,
   },
+};
+
+export const StreamingPlaceholderContent: Story = {
+  args: {
+    artifact: samples.streaming,
+  },
+  render: (args) => <RendererContentStory {...args} />,
 };

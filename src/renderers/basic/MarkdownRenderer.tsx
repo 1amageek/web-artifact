@@ -9,6 +9,7 @@ export const markdownRenderer: ArtifactRenderer = {
   artifactTypes: [artifactTypes.markdown],
   refine: markdownRefine,
   chrome: {
+    maxHeight: 520,
     preferredContentInsets: "none",
     surface: "text",
   },

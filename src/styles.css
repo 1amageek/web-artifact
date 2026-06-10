@@ -113,7 +113,10 @@
 }
 
 .wa-card__body {
+  display: grid;
   min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }
 
 .wa-card__body[data-insets="default"] {
@@ -214,10 +217,11 @@
 
 .wa-markdown {
   box-sizing: border-box;
-  overflow: auto;
-  max-height: 520px;
+  min-width: 0;
   padding: 12px;
   line-height: 1.58;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .wa-markdown h1,

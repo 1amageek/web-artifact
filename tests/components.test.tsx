@@ -131,6 +131,18 @@ describe("React artifact components", () => {
     expect(screen.getByText("Body")).toBeInTheDocument();
   });
 
+  it("applies renderer height constraints to the card body", () => {
+    render(
+      <ArtifactProvider renderers={createDefaultRenderers()}>
+        <ArtifactCard artifact={artifact({ payload: "## Body", isComplete: true })} />
+      </ArtifactProvider>,
+    );
+
+    const body = screen.getByText("Body").closest(".wa-card__body");
+    expect(body).not.toBeNull();
+    expect(body).toHaveStyle({ maxHeight: "520px" });
+  });
+
   it("renders a canvas with text and artifact segments", () => {
     render(
       <ArtifactProvider renderers={createDefaultRenderers()}>
