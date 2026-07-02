@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { AnyArtifact, ArtifactRenderer } from "../src";
 import {
+  ArtifactBody,
   ArtifactCanvas,
   ArtifactCard,
   ArtifactProvider,
@@ -140,6 +141,19 @@ describe("React artifact components", () => {
 
     const body = screen.getByText("Body").closest(".wa-card__body");
     expect(body).not.toBeNull();
+    expect(body).toHaveStyle({ maxHeight: "520px" });
+  });
+
+  it("applies renderer chrome to a standalone artifact body", () => {
+    render(
+      <ArtifactProvider renderers={createDefaultRenderers()}>
+        <ArtifactBody artifact={artifact({ payload: "## Body", isComplete: true })} />
+      </ArtifactProvider>,
+    );
+
+    const body = screen.getByText("Body").closest(".wa-artifact-body");
+    expect(body).not.toBeNull();
+    expect(body).toHaveAttribute("data-insets", "none");
     expect(body).toHaveStyle({ maxHeight: "520px" });
   });
 

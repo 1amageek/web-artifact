@@ -9,6 +9,7 @@ export * from "./react/ArtifactProvider";
 export * from "./react/ArtifactProgressView";
 export * from "./react/DefaultArtifactView";
 export * from "./react/ArtifactView";
+export * from "./react/ArtifactBody";
 export * from "./react/ArtifactCard";
 export * from "./react/ArtifactCanvas";
 export * from "./renderers";

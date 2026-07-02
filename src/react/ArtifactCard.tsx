@@ -1,8 +1,7 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { AnyArtifact } from "../core/types";
-import { ArtifactView } from "./ArtifactView";
-import { useArtifactRegistry } from "./ArtifactProvider";
+import { ArtifactBody } from "./ArtifactBody";
 
 export interface ArtifactCardProps {
   artifact: AnyArtifact;
@@ -20,17 +19,7 @@ export function ArtifactCard({
   hideWhenEmptyStreaming = true,
 }: ArtifactCardProps) {
   const [isExpanded, setIsExpanded] = useState(initiallyExpanded);
-  const registry = useArtifactRegistry();
-  const renderer = registry.resolve(artifact);
-  const contentInsets = renderer?.chrome?.preferredContentInsets ?? "default";
   const displayTitle = artifact.title.trim() || "Artifact";
-  const bodyStyle = useMemo(
-    () => ({
-      minHeight: renderer?.chrome?.minHeight,
-      maxHeight: renderer?.chrome?.maxHeight,
-    }),
-    [renderer?.chrome?.maxHeight, renderer?.chrome?.minHeight],
-  );
 
   if (
     hideWhenEmptyStreaming &&
@@ -68,13 +57,9 @@ export function ArtifactCard({
         </button>
       </header>
       {isExpanded ? (
-        <div
-          className="wa-card__body"
-          data-insets={contentInsets}
-          style={bodyStyle}
-        >
-          {children ?? <ArtifactView artifact={artifact} />}
-        </div>
+        <ArtifactBody artifact={artifact} className="wa-card__body">
+          {children}
+        </ArtifactBody>
       ) : null}
     </section>
   );

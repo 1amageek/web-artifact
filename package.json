@@ -1,7 +1,7 @@
 {
   "name": "web-artifact",
   "description": "React component library for rendering LLM-generated artifact blocks.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "repository": {
     "type": "git",

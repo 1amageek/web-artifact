@@ -1,15 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
+  ArtifactBody,
   ArtifactCanvas,
   ArtifactCard,
   ArtifactProvider,
-  ArtifactView,
   artifactTypes,
   createDefaultRenderers,
   parseArtifactMessage,
   type AnyArtifact,
   type ArtifactMessage,
-  useArtifactRegistry,
 } from "../src";
 
 interface RendererStoryProps {
@@ -325,22 +324,8 @@ function CanvasStory() {
 }
 
 function RendererBody({ artifact }: RendererStoryProps) {
-  const registry = useArtifactRegistry();
-  const renderer = registry.resolve(artifact);
-  const contentInsets = renderer?.chrome?.preferredContentInsets ?? "default";
-  const bodyStyle = {
-    minHeight: renderer?.chrome?.minHeight,
-    maxHeight: renderer?.chrome?.maxHeight,
-  };
-
   return (
-    <div
-      className="wa-card__body story-renderer-body"
-      data-insets={contentInsets}
-      style={bodyStyle}
-    >
-      <ArtifactView artifact={artifact} />
-    </div>
+    <ArtifactBody artifact={artifact} className="story-renderer-body" />
   );
 }
 

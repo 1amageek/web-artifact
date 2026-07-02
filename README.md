@@ -14,8 +14,9 @@ flowchart LR
   B --> C["ArtifactMessage"]
   C --> D["ArtifactCanvas"]
   D --> E["ArtifactCard"]
-  E --> F["ArtifactView"]
-  F --> G["ArtifactRenderer"]
+  E --> F["ArtifactBody"]
+  F --> G["ArtifactView"]
+  G --> H["ArtifactRenderer"]
 ```
 
 ## Usage
@@ -43,6 +44,10 @@ export function MessageArtifactView() {
   );
 }
 ```
+
+Use `ArtifactBody` when rendering an artifact without card chrome. It preserves
+renderer defaults such as content insets and max-height scrolling. `ArtifactView`
+is the low-level renderer outlet and does not apply chrome defaults by itself.
 
 For streaming output, keep one parser instance per message and feed incoming
 chunks into it. Render the latest `snapshot()` or returned message after each

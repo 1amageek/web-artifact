@@ -112,17 +112,22 @@
   gap: 4px;
 }
 
+.wa-artifact-body,
 .wa-card__body {
   display: grid;
   min-width: 0;
   min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
+.wa-artifact-body[data-insets="default"],
 .wa-card__body[data-insets="default"] {
   padding: 12px;
 }
 
+.wa-artifact-body[data-insets="none"],
 .wa-card__body[data-insets="none"] {
   padding: 0;
 }
